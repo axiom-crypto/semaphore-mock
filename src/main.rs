@@ -1,6 +1,7 @@
 use clap::Parser;
 use rand::Rng;
 use ruint::Uint;
+use semaphore::circuit::zkey;
 use semaphore::{
     hash_to_field, identity::Identity, poseidon_tree::LazyPoseidonTree, protocol::*, Field,
 };
@@ -25,6 +26,7 @@ struct OutputJson {
     external_nullifier_hash: Uint<256, 4>,
     nullifier_hash: Uint<256, 4>,
     proof: Proof,
+    vk: VerifyingKey,
 }
 
 impl Serialize for IdentitySecrets {
@@ -170,6 +172,11 @@ fn main() {
             )
             .unwrap();
 
+            let zkey = zkey(tree_depth);
+            let pvk = prepare_verifying_key(&zkey.0.vk);
+            let vk = pvk.vk.clone();
+            let eth_vk = get_ethereum_vkey(vk);
+
             assert!(success);
 
             let output: OutputJson = OutputJson {
@@ -178,6 +185,7 @@ fn main() {
                 external_nullifier_hash,
                 nullifier_hash,
                 proof,
+                vk: eth_vk,
             };
 
             // Serialize output into JSON

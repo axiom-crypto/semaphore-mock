@@ -13,7 +13,7 @@ license-file = "LICENSE"
 
 [dependencies]
 clap = { version = "^4.3.0", features = ["derive"] }
-semaphore = { git = "https://github.com/worldcoin/semaphore-rs", features = ["depth_16"]}
+semaphore = { git = "https://github.com/axiom-crypto/semaphore-rs.git", features = ["depth_16"]}
 rand = "^0.8.0"
 num-bigint = { version = "0.4", default-features = false, features = ["rand"] }
 color-eyre = "0.6"
